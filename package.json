@@ -1,0 +1,25 @@
+{
+  "name": "yexyls-mm",
+  "version": "1.0.0",
+  "description": "This bot is a simple discord.js bot which allows you to create tickets for your server. It is designed to fit !\"Mizo#5663 's MM Discord server.\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FinnyMarigold58/yexyls-mm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FinnyMarigold58/yexyls-mm/issues"
+  },
+  "homepage": "https://github.com/FinnyMarigold58/yexyls-mm#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "quick.db": "^7.1.3"
+  }
+}
