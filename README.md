@@ -18,4 +18,5 @@ Yes, you can self host this bot.
 
 1. Clone/Download the repo
 2. Run npm install
-3. Run node .
+3. Update .env variables
+4. Run node .
