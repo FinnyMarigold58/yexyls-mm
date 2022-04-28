@@ -10,7 +10,7 @@
 
 ## How do I close a ticket?
 
-    To close a ticket do /close and fill in the reason.
+    To close a ticket do /clos.
 
 ## Can I self host this bot?
 
