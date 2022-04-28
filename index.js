@@ -10,21 +10,17 @@ client.db = db;
 
 client.commands = new Collection();
 fs.readdir("./commands/", (err, files) => {
-  if (err) return console.error(err);
-  for (file in files) {
-    let f = files[file];
-    fs.readdir(`./commands/${f}`, (err, files) => {
-      if (err) return console.error(err);
-      files = files.filter((f) => f.split(".").pop() === "js");
-      if (files.length === 0) return console.log(`No commands in ${f}`);
-      console.log(`Found ${files.length} commands in ${f}`);
-      for (fi in files) {
-        let fi = files[fi];
-        let props = require(`./commands/${f}/${fi}`);
-        client.commands.set(props.command.name, props);
-      }
-    });
+  if (err) console.log(err);
+  let jsfile = files.filter((f) => f.split(".").pop() === "js");
+  if (jsfile.length <= 0) {
+    console.log("Couldn't find commands.");
+    return;
   }
+  jsfile.forEach((f, i) => {
+    let props = require(`./commands/${f}`);
+    console.log(`${f} loaded!`);
+    client.commands.set(props.command.name, props);
+  });
 });
 
 fs.readdir(`./events/`, (err, files) => {
@@ -38,4 +34,23 @@ client.login(token);
 
 client.on("ready", () => {
   console.log(`Logged into: ${client.user.tag}`);
+
+  // Update slash commands
+  const cmds = [];
+  client.commands.forEach((props) => {
+    cmds.push(props.command);
+  });
+
+  // client.guilds
+  //   .fetch("911173629427978311")
+  //   .then((guild) => {
+  //     guild.commands.set(cmds);
+  //   })
+  //   .then(console.log);
+
+  // client.application.commands.set(commands)
 });
+
+if (process.env.DEBUG == true) client.on("debug", console.log);
+
+console.log("Booted!");
