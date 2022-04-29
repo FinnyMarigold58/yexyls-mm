@@ -11,6 +11,16 @@ module.exports = (client) => {
         const dbcategory = db.ticketCategory;
         const category = await interaction.guild.channels.fetch(dbcategory);
 
+        for (i in db.blacklistedRoles) {
+          let roleId = db.blacklistedRoles[i]
+
+          if (interaction.member.roles.cache.has(roleId)) {
+            return interaction.reply({ ephemeral: true, content: "You can't create a ticket because you have a blacklisted role." })
+            break
+          }
+          continue
+        }
+
         //Check if person already has a ticket
         if (
           category.children.find(

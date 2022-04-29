@@ -6,6 +6,7 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
   announceChannel: Snowflake,
   ticketCategory: Snowflake,
   helperRoles: Array<Snowflake>,
+  blacklistedRole: Array<Snowflake>,
 }
 */
 
@@ -34,6 +35,12 @@ module.exports.command = {
       description: `The role ids that can help with tickets. (Seperated by spaces)`,
       required: true,
     },
+    {
+      type: "STRING",
+      name: "blacklistedRoles",
+      description: `The role ids of roles that can't make tckets. (Seperated by spaces)`,
+      required: false,
+    },
   ],
 };
 
@@ -49,6 +56,7 @@ module.exports.run = async (interaction, client) => {
   const channel = interaction.options.getChannel("channel");
   const ticketCategory = interaction.options.getChannel("category");
   const helperRoles = interaction.options.getString("rolelist");
+  const blacklistedRoles = interaction.options.getString("blacklistedRoles")
 
   //Get database
   const db = client.db;
@@ -56,12 +64,15 @@ module.exports.run = async (interaction, client) => {
   //Prepare permission data
   let rolearray = helperRoles.split(" ");
 
+  let blacklistedrolearray = blacklistedRoles.split(" ")
+
   //Update database
 
   db.set(`${interaction.guildId}`, {
     announceChannel: channel.id,
     ticketCategory: ticketCategory.id,
     helperRoles: rolearray,
+    blacklistedRoles: blacklistedrolearray,
   });
 
   //Reply to user with success message
