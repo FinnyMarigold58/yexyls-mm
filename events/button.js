@@ -1,13 +1,17 @@
+//MessageButton event handler
 module.exports = (client) => {
   client.on("interactionCreate", async (interaction) => {
     if (!interaction.isButton()) return;
 
+    //Get specific command
     switch (interaction.customId) {
       case "request":
+        //Grab db info
         const db = client.db.get(interaction.guildId);
         const dbcategory = db.ticketCategory;
         const category = await interaction.guild.channels.fetch(dbcategory);
 
+        //Check if person already has a ticket
         if (
           category.children.find(
             (c) =>
@@ -20,6 +24,7 @@ module.exports = (client) => {
             content: "You already have a ticket open.",
           });
 
+        //Create ticket
         const permisions = [
           {
             id: interaction.user.id,

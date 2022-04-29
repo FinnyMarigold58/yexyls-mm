@@ -37,6 +37,7 @@ module.exports.command = {
   ],
 };
 
+//Code to run when slash command is called
 module.exports.run = async (interaction, client) => {
   //If user doesn't have permission
   if (!interaction.member.permissions.has("ADMINISTRATOR"))
