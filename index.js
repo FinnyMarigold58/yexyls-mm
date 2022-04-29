@@ -5,6 +5,8 @@ const client = new Client({ intents: ["GUILDS"] });
 const token = process.env.TOKEN;
 const fs = require("fs");
 
+require("./keepAlive.js");
+
 const db = require("quick.db");
 client.db = db;
 

@@ -39,7 +39,10 @@ module.exports = (client) => {
           { permissionOverwrites: permisions }
         );
         ticketChannel.send({
-          content: `Explain what you need a middleman for. ${interaction.user}`,
+          content: `${interaction.user}
+          Fill in the format below while waiting for @Other Middleman.
+          \`The trade:\`
+          \`The other trader's user/ID:\``,
         });
 
         interaction.reply({

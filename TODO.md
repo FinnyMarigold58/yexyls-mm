@@ -4,8 +4,6 @@ This is an discord ticket bot.
 
 ### Todo
 
-- [ ] Bot hosting
-
 ### In Progress
 
 - [ ] Finish
@@ -15,3 +13,4 @@ This is an discord ticket bot.
 - [x] Created an base ticket bot
 - [x] Added embed to create tickets from
 - [x] Add limit
+- [x] Bot hosting

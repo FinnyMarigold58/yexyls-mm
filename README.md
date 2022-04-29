@@ -20,3 +20,7 @@ Yes, you can self host this bot.
 2. Run npm install
 3. Update .env variables
 4. Run node .
+
+## Why is there a keep alive file?
+
+    This is there so the bot doesn't get disconnected. When used with hosts like repl.it or other services like it.
