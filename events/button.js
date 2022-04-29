@@ -7,6 +7,19 @@ module.exports = (client) => {
         const db = client.db.get(interaction.guildId);
         const dbcategory = db.ticketCategory;
         const category = await interaction.guild.channels.fetch(dbcategory);
+
+        if (
+          category.children.find(
+            (c) =>
+              c.name ===
+              `ticket-${interaction.user.tag.replace("#", "").toLowerCase()}`
+          )
+        )
+          return interaction.reply({
+            ephemeral: true,
+            content: "You already have a ticket open.",
+          });
+
         const permisions = [
           {
             id: interaction.user.id,
@@ -27,6 +40,11 @@ module.exports = (client) => {
         );
         ticketChannel.send({
           content: `Explain what you need a middleman for. ${interaction.user}`,
+        });
+
+        interaction.reply({
+          ephemeral: true,
+          content: `Ticket opened! ${ticketChannel}`,
         });
         break;
     }

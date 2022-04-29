@@ -4,15 +4,14 @@ This is an discord ticket bot.
 
 ### Todo
 
-- [ ] Add limit
-- [ ] Fix emojis
+- [ ] Bot hosting
 
 ### In Progress
 
 - [ ] Finish
-- [ ] Finding bugs and fixing them
 
 ### Done ✓
 
 - [x] Created an base ticket bot
 - [x] Added embed to create tickets from
+- [x] Add limit

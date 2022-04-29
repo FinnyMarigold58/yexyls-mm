@@ -12,12 +12,12 @@ module.exports.run = async (interaction, client) => {
     client.db.get(interaction.guildId).ticketCategory
   ) {
     interaction.reply({ content: "Closing ticket..." });
-    await sleep(3000);
+    await sleep(1000);
     return interaction.channel.delete();
   } else {
     return interaction.reply({
       content: "You can't close this ticket.",
-      emphemeral: true,
+      ephemeral: true,
     });
   }
 };

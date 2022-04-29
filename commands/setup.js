@@ -77,14 +77,10 @@ module.exports.run = async (interaction, client) => {
   ・Timewasters/Trolling/Not vouching the middleman will lead to @Middleman Ban.
  
   __What we don't middleman__
-  ・:Nitro:  Nitro
-  ・:Giftcard: Roblox Giftcards
-  ・:Accounts: Accounts
-  ・:Discord_server: Discord Servers
- 
-  __Availability__
-  :available: - Available
-  :unavailable: - Unavailable`,
+  ・Nitro
+  ・Roblox Giftcards
+  ・Accounts
+  ・Discord Servers`,
     title: "Request a Middleman",
     color: "GREY",
     timestamp: new Date(),
@@ -101,7 +97,7 @@ module.exports.run = async (interaction, client) => {
   const messageButton = new MessageButton({
     label: "Request a Middleman",
     customId: "request",
-    style: "PRIMARY",
+    style: "SUCCESS",
   });
 
   //Add button to actionrow
