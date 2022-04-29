@@ -1,5 +1,5 @@
 //Requirements
-const { MessageButton, MessageActionRow, MessageEmbed } = require("discord.js")
+const { MessageButton, MessageActionRow, MessageEmbed } = require("discord.js");
 
 //MessageButton event handler
 module.exports = (client) => {
@@ -15,13 +15,17 @@ module.exports = (client) => {
         const category = await interaction.guild.channels.fetch(dbcategory);
 
         for (i in db.blacklistedRoles) {
-          let roleId = db.blacklistedRoles[i]
+          let roleId = db.blacklistedRoles[i];
 
           if (interaction.member.roles.cache.has(roleId)) {
-            return interaction.reply({ ephemeral: true, content: "You can't create a ticket because you have a blacklisted role." })
-            break
+            return interaction.reply({
+              ephemeral: true,
+              content:
+                "You can't create a ticket because you have a blacklisted role.",
+            });
+            break;
           }
-          continue
+          continue;
         }
 
         //Check if person already has a ticket
@@ -61,19 +65,26 @@ module.exports = (client) => {
           label: `Close`,
           emoji: "🔒",
           customId: `closeTicket`,
-          style: "SECONDARY"
-        })
-        const row = new MessageActionRow().addComponents(closeButton)
-        const embed=  new MessageEmbed({description: `A middleman will be with you shortly.
+          style: "SECONDARY",
+        });
+        const row = new MessageActionRow().addComponents(closeButton);
+        const embed = new MessageEmbed({
+          description: `A middleman will be with you shortly.
         Please fill out the format below.
         
         Example:
         Deak: NFR Snow Olw for Candy set
         Other trander: bosco#1111 or ID
-        To close this ticket press the button`})
+        To close this ticket press the button`,
+        });
         ticketChannel.send({
-          content: `${interaction.user} Welcome. Please kindly wait for the ${db.helperRoles.map((id) => `<@${id}>`).join()} to arrive. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
-          components: [row]
+          content: `${
+            interaction.user
+          } Welcome. Please kindly wait for the ${db.helperRoles
+            .map((id) => `<@&${id}>`)
+            .join()} to arrive. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
+          embeds: [embed],
+          components: [row],
         });
 
         interaction.reply({
@@ -81,10 +92,10 @@ module.exports = (client) => {
           content: `Ticket opened! ${ticketChannel}`,
         });
         break;
-      case closeTicket:
+      case "closeTicket":
         //Delete channel
-         interaction.channel.delete()
-         break
+        interaction.channel.delete();
+        break;
     }
   });
 };

@@ -51,12 +51,12 @@ client.on("ready", () => {
     cmds.push(props.command);
   });
 
-  // client.guilds
-  //   .fetch("911173629427978311")
-  //   .then((guild) => {
-  //     guild.commands.set([]);
-  //   })
-  //   .then(console.log);
+  client.guilds
+    .fetch("911173629427978311")
+    .then((guild) => {
+      guild.commands.set(cmds);
+    })
+    .then(console.log);
 
   // client.application.commands.set(cmds).then(console.log);
 });

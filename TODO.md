@@ -3,7 +3,6 @@
 This is an discord ticket bot.
 
 ### Todo
-- [ ] Add blacklist slash command
 - [ ] Transcripts
 
 ### In Progress
@@ -16,3 +15,4 @@ This is an discord ticket bot.
 - [x] Added embed to create tickets from
 - [x] Add limit
 - [x] Bot hosting
+- [x] Add blacklist slash command

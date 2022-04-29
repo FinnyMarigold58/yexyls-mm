@@ -37,7 +37,7 @@ module.exports.command = {
     },
     {
       type: "STRING",
-      name: "blacklistedRoles",
+      name: "blacklistedroles",
       description: `The role ids of roles that can't make tckets. (Seperated by spaces)`,
       required: false,
     },
@@ -56,7 +56,7 @@ module.exports.run = async (interaction, client) => {
   const channel = interaction.options.getChannel("channel");
   const ticketCategory = interaction.options.getChannel("category");
   const helperRoles = interaction.options.getString("rolelist");
-  const blacklistedRoles = interaction.options.getString("blacklistedRoles")
+  const blacklistedRoles = interaction.options.getString("blacklistedroles");
 
   //Get database
   const db = client.db;
@@ -64,7 +64,7 @@ module.exports.run = async (interaction, client) => {
   //Prepare permission data
   let rolearray = helperRoles.split(" ");
 
-  let blacklistedrolearray = blacklistedRoles.split(" ")
+  let blacklistedrolearray = blacklistedRoles?.split(" ");
 
   //Update database
 
@@ -72,7 +72,7 @@ module.exports.run = async (interaction, client) => {
     announceChannel: channel.id,
     ticketCategory: ticketCategory.id,
     helperRoles: rolearray,
-    blacklistedRoles: blacklistedrolearray,
+    blacklistedRoles: blacklistedrolearray || [],
   });
 
   //Reply to user with success message
