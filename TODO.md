@@ -4,6 +4,7 @@ This is an discord ticket bot.
 
 ### Todo
 - [ ] Add blacklist slash command
+- [ ] Transcripts
 
 ### In Progress
 
