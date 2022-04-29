@@ -1,3 +1,6 @@
+//Requirements
+const { MessageButton, MessageActionRow } = require("discord.js")
+
 //MessageButton event handler
 module.exports = (client) => {
   client.on("interactionCreate", async (interaction) => {
@@ -53,11 +56,17 @@ module.exports = (client) => {
           `ticket-${interaction.user.tag}`,
           { permissionOverwrites: permisions }
         );
+
+        const closeButton = new MessageButton({
+          label: `Close`,
+          emoji: "🔒",
+          customId: `closeTicket`,
+          style: "SECONDARY"
+        })
+        const row = new MessageActionRow().addComponents(closeButton)
         ticketChannel.send({
-          content: `${interaction.user}
-          Fill in the format below while waiting for @Other Middleman.
-          \`The trade:\`
-          \`The other trader's user/ID:\``,
+          content: `${interaction.user} Welcome. Please kindly wait for the ${db.helperRoles.map((id) => `<@${id}>`).join()} to arrive. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
+          components: [row]
         });
 
         interaction.reply({

@@ -3,6 +3,7 @@
 This is an discord ticket bot.
 
 ### Todo
+- [ ] Add blacklist slash command
 
 ### In Progress
 
