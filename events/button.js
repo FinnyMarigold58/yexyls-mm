@@ -1,5 +1,5 @@
 //Requirements
-const { MessageButton, MessageActionRow } = require("discord.js")
+const { MessageButton, MessageActionRow, MessageEmbed } = require("discord.js")
 
 //MessageButton event handler
 module.exports = (client) => {
@@ -64,6 +64,13 @@ module.exports = (client) => {
           style: "SECONDARY"
         })
         const row = new MessageActionRow().addComponents(closeButton)
+        const embed=  new MessageEmbed({description: `A middleman will be with you shortly.
+        Please fill out the format below.
+        
+        Example:
+        Deak: NFR Snow Olw for Candy set
+        Other trander: bosco#1111 or ID
+        To close this ticket press the button`})
         ticketChannel.send({
           content: `${interaction.user} Welcome. Please kindly wait for the ${db.helperRoles.map((id) => `<@${id}>`).join()} to arrive. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
           components: [row]
@@ -74,6 +81,10 @@ module.exports = (client) => {
           content: `Ticket opened! ${ticketChannel}`,
         });
         break;
+      case closeTicket:
+        //Delete channel
+         interaction.channel.delete()
+         break
     }
   });
 };
