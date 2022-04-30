@@ -50,7 +50,8 @@ module.exports.run = async (message, args, client) => {
     return message.reply({ content: "Invalid ticket category type" });
   for (let i = 0; i < helperRoles.length; i++) {
     channelType = await message.guild.roles.resolve(helperRoles[i]);
-    helperRoles.splice(helperRoles.indexOf(helperRoles[i]), 1);
+    if (!channelType)
+      helperRoles.splice(helperRoles.indexOf(helperRoles[i]), 1);
     if (helperRoles.length == 0)
       return message.reply({ content: "Invalid helper roles" });
   }
@@ -60,6 +61,7 @@ module.exports.run = async (message, args, client) => {
 
   //Prepare permission data
   let rolearray = helperRoles;
+  let startingTicket = 1;
 
   //Update database
 
@@ -68,6 +70,7 @@ module.exports.run = async (message, args, client) => {
     ticketCategory: ticketCategory,
     helperRoles: rolearray,
     blacklistedRoles: [],
+    nextTicket: startingTicket,
   });
 
   //Reply to user with success message

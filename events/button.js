@@ -11,6 +11,8 @@ module.exports = (client) => {
       case "request":
         //Grab db info
         const db = client.db.get(interaction.guildId);
+        if (!db.nextTicket) db.nextTicket = 1;
+        client.db.set(interaction.guildId, db);
         const dbcategory = db.ticketCategory;
         const category = await interaction.guild.channels.fetch(dbcategory);
 
@@ -23,7 +25,6 @@ module.exports = (client) => {
               content:
                 "You can't create a ticket because you have a blacklisted role.",
             });
-            break;
           }
           continue;
         }
@@ -32,8 +33,7 @@ module.exports = (client) => {
         if (
           category.children.find(
             (c) =>
-              c.name ===
-              `ticket-${interaction.user.tag.replace("#", "").toLowerCase()}`
+              c.name.split("-")[0] === interaction.user.username.toLowerCase()
           )
         )
           return interaction.reply({
@@ -48,6 +48,11 @@ module.exports = (client) => {
             type: "member",
             allow: ["READ_MESSAGE_HISTORY", "VIEW_CHANNEL", "SEND_MESSAGES"],
           },
+          {
+            id: interaction.guildId,
+            type: "role",
+            deny: ["VIEW_CHANNEL"],
+          },
         ];
         db.helperRoles.forEach((role) => {
           permisions.push({
@@ -56,8 +61,9 @@ module.exports = (client) => {
             allow: ["READ_MESSAGE_HISTORY", "VIEW_CHANNEL", "SEND_MESSAGES"],
           });
         });
+
         const ticketChannel = await category.createChannel(
-          `ticket-${interaction.user.tag}`,
+          `${interaction.user.username}-${db.nextTicket}`,
           { permissionOverwrites: permisions }
         );
 
@@ -69,20 +75,19 @@ module.exports = (client) => {
         });
         const row = new MessageActionRow().addComponents(closeButton);
         const embed = new MessageEmbed({
-          description: `A middleman will be with you shortly.
-        Please fill out the format below.
-        
-        Example:
-        Deak: NFR Snow Olw for Candy set
-        Other trander: bosco#1111 or ID
-        To close this ticket press the button`,
+          description: `•A Middleman will be with you shortly please fill out the format below
+
+          •Example
+          You:NFR Snow Owl For Candy Set
+          Other Trader:!"Mizo#5663 or ID
+          To close this ticket press the cancel button`,
         });
         ticketChannel.send({
           content: `${
             interaction.user
-          } Welcome. Please kindly wait for the ${db.helperRoles
+          } Welcome. Welcome, Fill in the format while your waiting for a ${db.helperRoles
             .map((id) => `<@&${id}>`)
-            .join()} to arrive. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
+            .join()}. If a middleman doesn't arrive in 20 minutes, please ping an online middleman.`,
           embeds: [embed],
           components: [row],
         });
@@ -91,6 +96,7 @@ module.exports = (client) => {
           ephemeral: true,
           content: `Ticket opened! ${ticketChannel}`,
         });
+        client.db.add(`${interaction.guildId}.nextTicket`, 1);
         break;
       case "closeTicket":
         //Delete channel
