@@ -27,13 +27,39 @@ module.exports.run = async (message, args, client) => {
   //Get command options
   const channel = args[0];
   const ticketCategory = args[1];
-  const helperRoles = args[2];
+  const helperRoles = args
+    .slice(2)
+    .filter((roleid) => /^[0-9]{18}$/.test(roleid));
+
+  //Check if options are valid
+  if (!channel || !ticketCategory || !helperRoles)
+    return message.reply({ content: `Invalid options. Usage: ${this.usage}` });
+  if (/^[0-9]{18}$/.test(channel) === false)
+    return message.reply({ content: "Invalid channel id" });
+  if (/^[0-9]{18}$/.test(ticketCategory) === false)
+    return message.reply({ content: "Invalid ticket category id" });
+  if (helperRoles.length === 0)
+    return message.reply({ content: "Invalid helper roles" });
+
+  // Check channel type and if roles exist
+  let channelType = await message.guild.channels.resolve(channel).type;
+  if (channelType !== "GUILD_TEXT")
+    return message.reply({ content: "Invalid channel type" });
+  channelType = await message.guild.channels.resolve(ticketCategory).type;
+  if (channelType !== "GUILD_CATEGORY")
+    return message.reply({ content: "Invalid ticket category type" });
+  for (let i = 0; i < helperRoles.length; i++) {
+    channelType = await message.guild.roles.resolve(helperRoles[i]);
+    helperRoles.splice(helperRoles.indexOf(helperRoles[i]), 1);
+    if (helperRoles.length == 0)
+      return message.reply({ content: "Invalid helper roles" });
+  }
 
   //Get database
   const db = client.db;
 
   //Prepare permission data
-  let rolearray = helperRoles.split(" ");
+  let rolearray = helperRoles;
 
   //Update database
 

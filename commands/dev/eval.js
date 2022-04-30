@@ -23,9 +23,7 @@ module.exports = {
 
       let out = await eval(code)();
       if (typeof out !== "string") out = require("util").inspect(out);
-      out = out
-        .replace(process.env.TOKEN, "[TOKEN REDACTED]")
-        .replace(process.env.MONGODB, "[DB URI REDACTED]");
+      out = out.replace(process.env.TOKEN, "[TOKEN REDACTED]");
 
       message.channel.send({ content: `Typeof output: **${typeof out}**` });
       message.channel.send({
