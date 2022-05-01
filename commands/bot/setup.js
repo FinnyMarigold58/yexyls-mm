@@ -11,6 +11,7 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 */
 
 //Command structure
+module.exports.args = true;
 module.exports.name = "setup";
 module.exports.description = "Setup the bot";
 module.exports.usage =

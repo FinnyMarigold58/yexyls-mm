@@ -58,7 +58,7 @@ module.exports = (client) => {
           permisions.push({
             id: role,
             type: "role",
-            allow: ["READ_MESSAGE_HISTORY", "VIEW_CHANNEL", "SEND_MESSAGES"],
+            allow: ["READ_MESSAGE_HISTORY", "VIEW_CHANNEL"],
           });
         });
 

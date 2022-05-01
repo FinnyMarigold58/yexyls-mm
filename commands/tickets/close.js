@@ -26,7 +26,19 @@ module.exports.run = async (message, args, client) => {
   ) {
     message.reply({ content: "Closing ticket..." });
     await sleep(1000);
-    return message.channel.delete();
+    let channelData = message.channel.name.split("-");
+    let newPermissions = [
+      { id: message.guildId, type: "role", deny: ["SEND_MESSAGES"] },
+    ];
+    const user = await message.guild.members.cache.find(
+      (member) => member.username.toLowerCase() == channelData[0]
+    );
+    message.channel.edit({
+      name: `closed-${channelData[1]}`,
+      permissionOverwrites: newPermissions,
+    });
+    console.log(user);
+    // message.channel.permissionOverwrites.delete(user);
   } else {
     return message.reply({
       content: "You can't close this ticket.",
