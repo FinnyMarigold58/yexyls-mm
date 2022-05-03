@@ -1,5 +1,7 @@
 //Requirements
 const { MessageButton, MessageActionRow, MessageEmbed } = require("discord.js");
+const discordTranscripts = require("discord-html-transcripts");
+const fs = require("fs");
 
 //MessageButton event handler
 module.exports = (client) => {
@@ -46,7 +48,7 @@ module.exports = (client) => {
           {
             id: interaction.user.id,
             type: "member",
-            allow: ["READ_MESSAGE_HISTORY", "VIEW_CHANNEL", "SEND_MESSAGES"],
+            allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
           },
           {
             id: interaction.guildId,
@@ -99,9 +101,143 @@ module.exports = (client) => {
         client.db.add(`${interaction.guildId}.nextTicket`, 1);
         break;
       case "closeTicket":
-        //Delete channel
+        //Check user permissions
+        if (!client.db.has(`${interaction.guildId}`))
+          return interaction.reply({
+            content: "Bot not set up have an administrator run /setup",
+          });
+
+        const helpers = client.db.get(`${interaction.guildId}`).helperRoles;
+        const memberIsHelper = helpers.some((role) =>
+          interaction.member.roles.cache.has(role)
+        );
+
+        if (!memberIsHelper)
+          return interaction.reply({
+            content: "You don't have permission to use this command",
+            ephemeral: true,
+          });
+        //Check channel category
+        if (
+          interaction.channel.parentId ==
+          client.db.get(interaction.guildId).ticketCategory
+        ) {
+          interaction.reply({ content: "Closing ticket..." });
+          await sleep(1000);
+          let channelData = interaction.channel.name.split("-");
+          let newPermissions = [
+            { id: interaction.guildId, type: "role", deny: ["SEND_MESSAGES"] },
+          ];
+          const user = await interaction.guild.members.cache.find(
+            (member) => member.user.username.toLowerCase() == channelData[0]
+          );
+          interaction.channel.edit({
+            name: `closed-${channelData[1]}`,
+            permissionOverwrites: newPermissions,
+          });
+
+          interaction.channel.permissionOverwrites.edit(user, {
+            VIEW_CHANNEL: null,
+          });
+
+          const transcript = new MessageButton({
+            label: "Transcript",
+            emoji: "📝",
+            style: "SECONDARY",
+            customId: "ticket-transcript",
+          });
+          const openb = new MessageButton({
+            label: "Open",
+            emoji: "🔓",
+            style: "SECONDARY",
+            customId: "ticket-open",
+          });
+          const deleteb = new MessageButton({
+            label: "Delete",
+            emoji: "🗑",
+            style: "SECONDARY",
+            customId: "ticket-delete",
+          });
+          const row = new MessageActionRow().addComponents(
+            transcript,
+            openb,
+            deleteb
+          );
+          interaction.channel.send({
+            embeds: [
+              new MessageEmbed({
+                description: `Ticket closed by ${interaction.user}`,
+                color: "YELLOW",
+              }),
+            ],
+            components: [row],
+          });
+        } else {
+          return interaction.reply({
+            content: "You can't close this ticket.",
+            ephemeral: true,
+          });
+        }
+        break;
+      case "ticket-transcript":
+        const channel = interaction.channel;
+
+        const newFile = await discordTranscripts.createTranscript(channel, {
+          returnBuffer: true,
+        });
+
+        if (
+          !(await fs.existsSync(`./public/transcripts/${interaction.guildId}`))
+        ) {
+          await fs.mkdirSync(`./public/transcripts/${interaction.guildId}`, {
+            recursive: true,
+          });
+        }
+
+        await fs.writeFileSync(
+          `./public/transcripts/${interaction.guildId}/${
+            interaction.channel.name.split("-")[1]
+          }.html`,
+          newFile
+        );
+
+        console.log(
+          `Transcript of ${
+            interaction.channel.name
+          } generated. Link: http://localhost:3000/transcripts/${
+            interaction.guildId
+          }/${interaction.channel.name.split("-")[1]}.html`
+        );
+        break;
+      case "ticket-open":
+        const user = await interaction.channel.permissionOverwrites.cache.find(
+          (perm) => perm.allow.has("SEND_MESSAGES", false)
+        );
+
+        interaction.channel.permissionOverwrites
+          .edit(interaction.guildId, {
+            SEND_MESSAGES: true,
+          })
+          .catch((err) => console.log(err));
+        console.log(user);
+        // interaction.channel.permissionOverwrites
+        //   .edit(user.id, {
+        //     VIEW_CHANNEL: true,
+        //   })
+        //   .catch((err) => console.log(err));
+
+        interaction.reply(
+          `Ticket reopened! Please add the user back to this ticket.`
+        );
+        break;
+      case "ticket-delete":
         interaction.channel.delete();
         break;
     }
   });
 };
+
+//Function to pause code for x milliseconds
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

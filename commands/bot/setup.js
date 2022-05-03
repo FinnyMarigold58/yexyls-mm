@@ -96,7 +96,7 @@ module.exports.run = async (message, args, client) => {
     color: "GREY",
     timestamp: new Date(),
     footer: {
-      text: `Yexyl's MM Service | `,
+      text: `${message.guild.name} | `,
       iconURL: message.guild.iconURL(),
     },
     author: {

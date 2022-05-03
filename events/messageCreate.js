@@ -6,12 +6,12 @@ module.exports = (client) => {
     if (message.author.bot) return; //Ignore bots and dms
 
     //If user mentions bot
-    if (message.content === `<@${client.user.id}>`)
-      return message.author
-        .send({
-          content: `Hey! My prefix is ${prefix}, you can ask for \`${prefix}help\` if you ever need.`,
-        })
-        .catch(console.log);
+    // if (message.content === `<@${client.user.id}>`)
+    //   return message.author
+    //     .send({
+    //       content: `Hey! My prefix is ${prefix}, you can ask for \`${prefix}help\` if you ever need.`,
+    //     })
+    //     .catch(console.log);
 
     if (!message.content.startsWith(prefix)) return;
 

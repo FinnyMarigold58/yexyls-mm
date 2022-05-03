@@ -1,3 +1,5 @@
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+
 //Command structure
 module.exports.name = "close";
 module.exports.description = "Close a ticket";
@@ -27,9 +29,7 @@ module.exports.run = async (message, args, client) => {
     message.reply({ content: "Closing ticket..." });
     await sleep(1000);
     let channelData = message.channel.name.split("-");
-    let newPermissions = [
-      { id: message.guildId, type: "role", deny: ["SEND_MESSAGES"] },
-    ];
+    let newPermissions = [];
     const user = await message.guild.members.cache.find(
       (member) => member.user.username.toLowerCase() == channelData[0]
     );
@@ -39,6 +39,39 @@ module.exports.run = async (message, args, client) => {
     });
 
     message.channel.permissionOverwrites.delete(user);
+
+    const transcript = new MessageButton({
+      label: "Transcript",
+      emoji: "📝",
+      style: "SECONDARY",
+      customId: "ticket-transcript",
+    });
+    const openb = new MessageButton({
+      label: "Open",
+      emoji: "🔓",
+      style: "SECONDARY",
+      customId: "ticket-open",
+    });
+    const deleteb = new MessageButton({
+      label: "Delete",
+      emoji: "🗑",
+      style: "SECONDARY",
+      customId: "ticket-delete",
+    });
+    const row = new MessageActionRow().addComponents(
+      transcript,
+      openb,
+      deleteb
+    );
+    message.channel.send({
+      embeds: [
+        new MessageEmbed({
+          description: `Ticket closed by ${message.author}`,
+          color: "YELLOW",
+        }),
+      ],
+      components: [row],
+    });
   } else {
     return message.reply({
       content: "You can't close this ticket.",
