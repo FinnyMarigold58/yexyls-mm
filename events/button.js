@@ -201,13 +201,34 @@ module.exports = (client) => {
           newFile
         );
 
-        console.log(
-          `Transcript of ${
-            interaction.channel.name
-          } generated. Link: http://localhost:3000/transcripts/${
-            interaction.guildId
-          }/${interaction.channel.name.split("-")[1]}.html`
-        );
+        const membed = new MessageEmbed({
+          color: "GREEN",
+          author: {
+            name: `New Transcript`,
+            iconURL: interaction.guild.iconURL(),
+          },
+          fields: [
+            {
+              name: "Ticket Name",
+              value: `ticket-${interaction.channel.name.split("-")[1]}`,
+            },
+            {
+              name: "Direct Transcript",
+              value: `[Click Here](https://mmbot.ga/transcripts/${
+                interaction.guildId
+              }/${interaction.channel.name.split("-")[1]}.html)`,
+            },
+          ],
+        });
+
+        interaction.reply({
+          files: [
+            `./public/transcripts/${interaction.guildId}/${
+              interaction.channel.name.split("-")[1]
+            }.html`,
+          ],
+          embeds: [membed],
+        });
         break;
       case "ticket-open":
         const user = await interaction.channel.permissionOverwrites.cache.find(
