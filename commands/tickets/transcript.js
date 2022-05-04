@@ -1,5 +1,6 @@
 const discordTranscripts = require("discord-html-transcripts");
 const fs = require("fs");
+const { MessageAttachment, MessageEmbed } = require("discord.js");
 
 module.exports.name = "transcript";
 module.exports.description = "Generate a transcript of channel messages.";
@@ -25,11 +26,29 @@ module.exports.run = async (message, args, client) => {
     newFile
   );
 
-  console.log(
-    `Transcript of ${
-      message.channel.name
-    } generated. Link: http://localhost:3000/transcripts/${message.guildId}/${
-      message.channel.name.split("-")[1]
-    }.html`
-  );
+  const embed = new MessageEmbed({
+    color: "GREEN",
+    author: { name: `New Transcript`, iconURL: message.guild.iconURL() },
+    fields: [
+      {
+        name: "Ticket Name",
+        value: `ticket-${message.channel.name.split("-")[1]}`,
+      },
+      {
+        name: "Direct Transcript",
+        value: `[Click Here](https://mmbot.ga/transcripts/${message.guildId}/${
+          message.channel.name.split("-")[1]
+        }.html)`,
+      },
+    ],
+  });
+
+  message.reply({
+    files: [
+      `./public/transcripts/${message.guildId}/${
+        message.channel.name.split("-")[1]
+      }.html`,
+    ],
+    embeds: [embed],
+  });
 };

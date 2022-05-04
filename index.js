@@ -81,7 +81,7 @@ client.on("ready", () => {
   // client.guilds
   //   .fetch("911173629427978311")
   //   .then((guild) => {
-  //     guild.commands.set(cmds);
+  //     guild.commands.set([]);
   //   })
   //   .then(console.log);
 

@@ -219,7 +219,6 @@ module.exports = (client) => {
             SEND_MESSAGES: true,
           })
           .catch((err) => console.log(err));
-        console.log(user);
         // interaction.channel.permissionOverwrites
         //   .edit(user.id, {
         //     VIEW_CHANNEL: true,
