@@ -72,48 +72,22 @@ module.exports.run = async (interaction, client) => {
     ticketCategory: ticketCategory.id,
     helperRoles: rolearray,
     blacklistedRoles: blacklistedrolearray || [],
+    announceMessage: `__MM Rules/Guidelines__
+    **Before you create a ticket, Here are the rules you should take notice of:**
+   
+    ・Make sure the user you are trading with is in the server.
+    ・Do not ping any Middleman, wait patiently for one to come.
+    ・Make sure the other trader agrees on using Middleman.
+    ・Timewasters/Trolling/Not vouching the middleman will lead to @Middleman Ban.
+   
+    __What we don't middleman__
+    ・Nitro
+    ・Roblox Giftcards
+    ・Accounts
+    ・Discord Servers`,
   });
-
-  //Reply to user with success message
-  interaction.reply({ content: `Setup complete, making embeded message now!` });
-
-  //Anouncement Embed
-  const embed = new MessageEmbed({
-    description: `__MM Rules/Guidelines__
-  **Before you create a ticket, Here are the rules you should take notice of:**
- 
-  ・Make sure the user you are trading with is in the server.
-  ・Do not ping any Middleman, wait patiently for one to come.
-  ・Make sure the other trader agrees on using Middleman.
-  ・Timewasters/Trolling/Not vouching the middleman will lead to @Middleman Ban.
- 
-  __What we don't middleman__
-  ・Nitro
-  ・Roblox Giftcards
-  ・Accounts
-  ・Discord Servers`,
-    title: "Request a Middleman",
-    color: "GREY",
-    timestamp: new Date(),
-    footer: {
-      text: `${interaction.guild.name} | `,
-      iconURL: interaction.guild.iconURL(),
-    },
-    author: {
-      iconURL: interaction.guild.iconURL(),
-    },
+  interaction.reply({
+    content:
+      "Setup complete. Run $setmessage <messge> to set the announcement message. After the message is set run $sendmessage.",
   });
-
-  // MessageButton to request
-  const messageButton = new MessageButton({
-    label: "Request a Middleman",
-    customId: "request",
-    style: "SUCCESS",
-  });
-
-  //Add button to actionrow
-  const actionRow = new MessageActionRow().addComponents(messageButton);
-
-  //Send message
-  channel.send({ embeds: [embed], components: [actionRow] });
 };

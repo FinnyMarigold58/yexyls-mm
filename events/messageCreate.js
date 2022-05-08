@@ -15,7 +15,7 @@ module.exports = (client) => {
 
     if (!message.content.startsWith(prefix)) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    const args = message.content.slice(prefix.length).split(/ +/g);
     const commandName = args.shift().toLowerCase();
     const command =
       client.commands.get(commandName) || //DO NOT PUT ;
