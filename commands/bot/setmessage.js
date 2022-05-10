@@ -10,7 +10,7 @@ module.exports.run = async (message, args, client) => {
       content: "You need to have administator permission to run this command.",
     });
   const db = client.db.get(`${message.guild.id}`);
-  db.announceMessage = args.join("");
+  db.announceMessage = args.join(" ");
   client.db.set(`${message.guild.id}`, db);
   return message.reply({
     content: "Announcement message set.",
