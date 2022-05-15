@@ -13,15 +13,6 @@ module.exports.run = async (message, args, client) => {
       content: "Bot not set up have an administrator run /setup",
     });
 
-  const helpers = client.db.get(`${message.guildId}`).helperRoles;
-  const memberIsHelper = helpers.some((role) =>
-    message.member.roles.cache.has(role)
-  );
-
-  if (!memberIsHelper)
-    return message.reply({
-      content: "You don't have permission to use this command",
-    });
   //Check channel category
   if (
     message.channel.parentId == client.db.get(message.guildId).ticketCategory
