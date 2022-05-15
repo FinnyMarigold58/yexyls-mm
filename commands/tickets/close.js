@@ -24,11 +24,9 @@ module.exports.run = async (message, args, client) => {
       (member) => member.user.username.toLowerCase() == channelData[0]
     );
     
-    interaction.channel.permissionOverwrites.edit(user, {
+    message.channel.permissionOverwrites.edit(user, {
             VIEW_CHANNEL: null,
           });
-
-    message.channel.permissionOverwrites.delete(user);
 
     const transcript = new MessageButton({
       label: "Transcript",
