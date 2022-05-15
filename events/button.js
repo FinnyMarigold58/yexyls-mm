@@ -107,16 +107,6 @@ module.exports = (client) => {
             content: "Bot not set up have an administrator run /setup",
           });
 
-        const helpers = client.db.get(`${interaction.guildId}`).helperRoles;
-        const memberIsHelper = helpers.some((role) =>
-          interaction.member.roles.cache.has(role)
-        );
-
-        if (!memberIsHelper)
-          return interaction.reply({
-            content: "You don't have permission to use this command",
-            ephemeral: true,
-          });
         //Check channel category
         if (
           interaction.channel.parentId ==
