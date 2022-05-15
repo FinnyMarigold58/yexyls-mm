@@ -20,14 +20,13 @@ module.exports.run = async (message, args, client) => {
     message.reply({ content: "Closing ticket..." });
     await sleep(1000);
     let channelData = message.channel.name.split("-");
-    let newPermissions = [];
     const user = await message.guild.members.cache.find(
       (member) => member.user.username.toLowerCase() == channelData[0]
     );
-    message.channel.edit({
-      name: `closed-${channelData[1]}`,
-      permissionOverwrites: newPermissions,
-    });
+    
+    interaction.channel.permissionOverwrites.edit(user, {
+            VIEW_CHANNEL: null,
+          });
 
     message.channel.permissionOverwrites.delete(user);
 
